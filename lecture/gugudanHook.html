@@ -1,0 +1,59 @@
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>구구단</title>
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+            //리액트에서 못쓰는문법 class, for 등이 있고 className, labelFor로 사용해야한다. html에서 변환된다.
+        const GuGuDan = () => {
+            //아래의 코드는 함수 안에 있어야한다.(아래 코드는 구조분해(비구조화 할당)라는 약속이다.)
+            //변수 자리에 배열쓰고 객체를 쓰는 기법이 구조 분해이다.
+            const [first, setFirst] = React.useState(Math.ceil(Math.random() * 9));
+            const [second, setSecond] = React.useState(Math.ceil(Math.random() * 9));
+            const [value, setValue] = React.useState('');
+            const [result, setResult] = React.useState('');
+            const inputRef = React.useRef(null);//ref에 접근할때는 useRef를 사용해서 돔에 접근한다.
+            const onChangeInput = (e) => {
+                setValue(e.target.value);
+            }
+            const onSubmitForm = (e) => {
+                e.preventDefault();
+                if (parseInt(value) === first * second) {
+                    setResult('정답 : ' + value);
+                    setFirst(Math.ceil(Math.random() * 9));
+                    setSecond(Math.ceil(Math.random() * 9));
+                    setValue('');
+                    
+                } else {
+                    setResult('땡');
+                    setValue('');
+
+                }
+                inputRef.current.focus();//돔에 접근할때는 current를 사용해서 접근한다.
+            };
+
+            console.log('렌더링');
+            return (<React.Fragment>
+                    <div>{first} 곱하기 {second}는?</div>
+                    <form onSubmit = {onSubmitForm}>
+                        <input ref={inputRef} onChange={onChangeInput} value={value} />
+                        <button>입력!</button>    
+                    </form>
+                    <div id="result">{result}</div>
+                    </React.Fragment>
+            );
+        }
+    </script>
+    <script type="text/babel">
+        ReactDOM.render(<GuGuDan />, document.querySelector('#root'));
+            //ReactDOM.render(e(LikeButton), document.querySelector('#root'));//ReactDOM이 화면에 실제로 구현해준다.
+    </script>
+</body>
+
+</html>
